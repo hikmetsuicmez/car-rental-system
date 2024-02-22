@@ -1,8 +1,6 @@
 package com.hikmetsuicmez.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,19 +16,27 @@ public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
-    @NotBlank
+
+    @Column(name = "registration_nr", nullable = false, length = 8)
+    private String registrationNr;
+
+    @Column(name = "brand", nullable = false)
     private String brand;
+
+    @Column(name = "model", nullable = false)
     private String model;
-    private String color;
-    @NotBlank
-    private String carBodyStyle;
-    private String transmissionType;
-    private String fuelType;
-    private int hp;
-    private int year;
-    private double dailyPrice;
-    private boolean available;
+
+    @Column(name = "is_available", nullable = false)
+    private Boolean isAvailable;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "car_package_id", referencedColumnName = "id")
+    private CarPackage carPackage;
+
+    @OneToOne(orphanRemoval = true)
+    private CarParameters carParameters;
     // location field
     // alım tarihi teslim tarihi
 
